@@ -9,7 +9,6 @@ const Products = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // GET CATEGORY FROM URL
   const [searchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category");
 
@@ -18,31 +17,22 @@ const Products = () => {
       try {
         setLoading(true);
 
-        const response = await fetch(
-          "https://fakestoreapi.com/products"
-        );
-
+        const response = await fetch("https://fakestoreapi.com/products");
         const data = await response.json();
 
         setProducts(data);
 
-        // AUTO FILTER FROM ABOUT PAGE
         if (selectedCategory) {
           setFilteredProducts(
             data.filter(
-              (item) =>
-                item.category === selectedCategory
+              (item) => item.category === selectedCategory
             )
           );
         } else {
           setFilteredProducts(data);
         }
-
       } catch (error) {
-        console.error(
-          "Error fetching products:",
-          error
-        );
+        console.error("Error fetching products:", error);
       } finally {
         setLoading(false);
       }
@@ -51,20 +41,12 @@ const Products = () => {
     getProducts();
   }, [selectedCategory]);
 
-  // BUTTON FILTER
   const filterProducts = (category) => {
-
     if (category === "all") {
-
       setFilteredProducts(products);
-
     } else {
-
       setFilteredProducts(
-        products.filter(
-          (item) =>
-            item.category === category
-        )
+        products.filter((item) => item.category === category)
       );
     }
   };
@@ -77,19 +59,13 @@ const Products = () => {
     "electronics",
   ];
 
-  // LOADING UI
-  const Loading = () => (
+  const LoadingSkeleton = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-
       {Array(6)
         .fill(0)
         .map((_, i) => (
-          <div
-            key={i}
-            className="rounded-2xl border p-4"
-          >
+          <div key={i} className="rounded-2xl border p-4">
             <Skeleton height={280} />
-
             <div className="mt-4">
               <Skeleton count={2} />
             </div>
@@ -98,14 +74,11 @@ const Products = () => {
     </div>
   );
 
-  // PRODUCTS UI
   const ShowProducts = () => (
     <>
       {/* CATEGORY BUTTONS */}
       <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12">
-
         {categories.map((cat) => (
-
           <button
             key={cat}
             onClick={() => filterProducts(cat)}
@@ -113,23 +86,18 @@ const Products = () => {
           >
             {cat}
           </button>
-
         ))}
       </div>
 
       {/* PRODUCTS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-
         {filteredProducts.map((product) => (
-
           <div
             key={product.id}
             className="group relative bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition duration-300"
           >
-
             {/* IMAGE */}
             <div className="h-[300px] flex items-center justify-center bg-white p-6">
-
               <img
                 src={product.image}
                 alt={product.title}
@@ -139,13 +107,11 @@ const Products = () => {
 
             {/* CONTENT */}
             <div className="p-5 border-t border-gray-100">
-
               <h3 className="text-sm font-medium line-clamp-1 text-gray-900">
                 {product.title}
               </h3>
 
               <div className="flex items-center justify-between mt-3">
-
                 <span className="text-xl font-bold text-black">
                   ${product.price}
                 </span>
@@ -153,15 +119,20 @@ const Products = () => {
                 <span className="text-sm text-yellow-500 font-medium">
                   ★ {product.rating?.rate}
                 </span>
-
               </div>
             </div>
 
-            {/* HOVER ACTIONS */}
+            {/* HOVER + MOBILE ACTIONS */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition">
-
-              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-6 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300 flex gap-3">
-
+              <div
+                className="
+                  absolute bottom-0 left-0 right-0 p-4 flex gap-3
+                  opacity-100 translate-y-0
+                  sm:opacity-0 sm:translate-y-6
+                  sm:group-hover:opacity-100 sm:group-hover:translate-y-0
+                  transition duration-300
+                "
+              >
                 <Link
                   to={`/product/${product.id}`}
                   className="flex-1 text-center py-2 rounded-lg bg-black text-white text-sm hover:bg-gray-800 transition"
@@ -175,11 +146,9 @@ const Products = () => {
                 >
                   Add
                 </button>
-
               </div>
             </div>
           </div>
-
         ))}
       </div>
     </>
@@ -187,19 +156,15 @@ const Products = () => {
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-12">
-
       {/* TITLE */}
       <div className="text-center mb-12">
-
         <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
           Latest Products
         </h2>
-
         <div className="w-20 h-[2px] bg-black mx-auto mt-4 rounded-full" />
-
       </div>
 
-      {loading ? <Loading /> : <ShowProducts />}
+      {loading ? <LoadingSkeleton /> : <ShowProducts />}
     </section>
   );
 };
