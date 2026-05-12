@@ -3,13 +3,18 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/authroutes');
 
-// --- ADD THIS LINE HERE ---
+// DB connection
 require('./config/db'); 
-// --------------------------
 
 const app = express();
 
-app.use(cors());
+// ✅ FIXED CORS
+app.use(cors({
+    origin: "https://zentixor.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
+
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
