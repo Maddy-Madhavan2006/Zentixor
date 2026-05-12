@@ -25,7 +25,7 @@ const ContactPage = () => {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/contact",
+        "https://zentixor.onrender.com/api/auth/contact",
         {
           method: "POST",
 
